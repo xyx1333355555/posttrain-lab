@@ -1,0 +1,46 @@
+{
+  "tag": "e2_sft_from_base",
+  "model": "D:/data/sft_runs\\e2_base\\final",
+  "domain": {
+    "ppl": 46.7669,
+    "avg_nll": 3.8452,
+    "blocks": 59,
+    "tokens": 30149
+  },
+  "general": {
+    "ppl": 25.2146,
+    "avg_nll": 3.2274,
+    "blocks": 22,
+    "tokens": 11242
+  },
+  "gsm8k": {
+    "accuracy": 0.29,
+    "format_rate": 1.0,
+    "fmt_boxed": 0.99,
+    "fmt_reasoning": 1.0,
+    "n": 200,
+    "samples": [
+      {
+        "pred_ok": false,
+        "text": "<reasoning>\nShe has 16-3=<<16-3=13>>13 eggs to sell.\nShe makes 2*13=$<<2*13=26>>26 every day.\n</reasoning>\nThe final answer is \\boxed{26}."
+      },
+      {
+        "pred_ok": false,
+        "text": "<reasoning>\nIt takes 2*2=<<2*2=4>>4 bolts of blue fiber.\nIt takes 4/2=<<4/2=2>>2 bolts of white fiber.\nSo it takes 4+2=<<4+2=6>>6 bolts in total.\n</reasoning>\nThe final answer is \\boxed{6}."
+      },
+      {
+        "pred_ok": false,
+        "text": "<reasoning>\nThe value of the house is now $80,000 + $50,000 = $<<80000+50000=130000>>130,000.\nThe increase in value is $130,000 - $80,000 = $<<130000-80000=50000>>50,000.\nThe increase in value is 50% of the original purchase price, so it's worth 50/100 * $80,000 = $<<50/100*80000=40000>>40,000.\nSo J"
+      },
+      {
+        "pred_ok": true,
+        "text": "<reasoning>\nHe runs 60*3=<<60*3=180>>180 meters in one sprint.\nSo he runs 180*3=<<180*3=540>>540 meters in a week.\n</reasoning>\nThe final answer is \\boxed{540}."
+      },
+      {
+        "pred_ok": true,
+        "text": "<reasoning>\nWendi has 20 chickens that means there are 20*3=<<20*3=60>>60 total cups of feed for all the chickens.\nShe uses 15+25=<<15+25=40>>40 cups of feed in the morning and in the afternoon so she needs 60-40=<<60-40=20>>20 more cups of feed for the final meal of the day.\n</reasoning>\nThe final "
+      }
+    ]
+  },
+  "peak_vram_gb": 1.82
+}

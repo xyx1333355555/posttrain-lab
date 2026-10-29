@@ -69,7 +69,7 @@ def gsm8k_acc(model, tok, n: int, max_new_tokens: int, bs: int, dev: str) -> dic
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
     prompts = [build_prompt(q, tok) for q in df["question"].tolist()]
-    correct, fmt, outs = 0, 0, []
+    correct, fmt, n_box, n_reason, outs = 0, 0, 0, 0, []
     for i in range(0, len(prompts), bs):
         batch = prompts[i:i + bs]
         enc = tok(batch, return_tensors="pt", padding=True).to(dev)
@@ -82,10 +82,15 @@ def gsm8k_acc(model, tok, n: int, max_new_tokens: int, bs: int, dev: str) -> dic
             pred = extract_boxed_answer(txt)
             ok = bool(is_math_equivalent(pred, gold))
             correct += int(ok)
-            fmt += int(("\\boxed" in txt) or ("<reasoning>" in txt))
+            has_box = "\\boxed" in txt
+            has_reason = "<reasoning>" in txt
+            fmt += int(has_box or has_reason)
+            n_box += int(has_box)
+            n_reason += int(has_reason)
             outs.append({"pred_ok": ok, "text": txt[:300]})
         print(f"  gsm8k {min(i+bs, len(prompts))}/{len(prompts)}  acc={correct/max(1,min(i+bs,len(prompts))):.3f}", flush=True)
     return {"accuracy": round(correct / len(prompts), 4), "format_rate": round(fmt / len(prompts), 4),
+            "fmt_boxed": round(n_box / len(prompts), 4), "fmt_reasoning": round(n_reason / len(prompts), 4),
             "n": len(prompts), "samples": outs[:5]}
 
 

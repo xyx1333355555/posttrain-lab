@@ -1,0 +1,38 @@
+{
+  "n": 200,
+  "steps": 200,
+  "points": {
+    "e2_base_orig": {
+      "gsm8k_acc": 0.27,
+      "format_rate": 0.54,
+      "fmt_boxed": 0.465,
+      "fmt_reasoning": 0.09,
+      "domain_ppl": 46.6495,
+      "general_ppl": 24.8702
+    },
+    "e2_cpt_replay10": {
+      "gsm8k_acc": 0.25,
+      "format_rate": 0.445,
+      "fmt_boxed": 0.445,
+      "fmt_reasoning": 0.0,
+      "domain_ppl": 29.2458,
+      "general_ppl": 24.5944
+    },
+    "e2_sft_from_base": {
+      "gsm8k_acc": 0.29,
+      "format_rate": 1.0,
+      "fmt_boxed": 0.99,
+      "fmt_reasoning": 1.0,
+      "domain_ppl": 46.7669,
+      "general_ppl": 25.2146
+    },
+    "e2_sft_from_cpt": {
+      "gsm8k_acc": 0.285,
+      "format_rate": 1.0,
+      "fmt_boxed": 0.99,
+      "fmt_reasoning": 1.0,
+      "domain_ppl": 29.3168,
+      "general_ppl": 23.5747
+    }
+  }
+}

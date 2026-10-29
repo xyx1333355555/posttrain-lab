@@ -1,6 +1,6 @@
-# E1 · 垂直领域增量预训练（CPT）与灾难性遗忘
+# E1 + E2 · 垂直领域 CPT、灾难性遗忘与 SFT 恢复
 
-对应 JD：**「参与垂直领域大模型的全流程训练工作，包括增量预训练（CPT）、SFT、强化学习对齐（RLHF/DPO/GRPO）」** 中的第一环 —— CPT。
+对应 JD：**「参与垂直领域大模型的全流程训练工作，包括增量预训练（CPT）、SFT、强化学习对齐（RLHF/DPO/GRPO）」** 中的前两环 —— CPT → SFT 的因果闭环。
 
 单卡 RTX 4060 8GB 可跑，全程 0 元算力。
 
@@ -62,6 +62,48 @@
 3. **10% 通用回放几乎零成本地消除遗忘**：混入 10%（按 token）通用语料后，通用困惑度回到 **24.59（比基线还低 1.1%）**，而领域困惑度仅从 29.08 微升到 29.25（**代价 0.6%**）。即「用 10% 的数据预算买回全部通用能力」。
 
 4. **额外发现（引出下一环 SFT）**：CPT 会削弱指令遵循格式，`\boxed{}` 格式合规率从 56% 掉到 46% —— 说明 CPT 之后**必须接 SFT 才能恢复对话/输出格式**，这正是全流程里 CPT→SFT 的动机，而不是照本宣科。
+
+---
+
+## 3.5 E2 · CPT 之后的 SFT 恢复实验（格式率因果闭环）
+
+E1 只观察到了「CPT 掉格式率」，E2 补上后半句「SFT 拉回来」，把 CPT→SFT 变成一条有因果证据的链。
+
+**单变量对照**：两个 arm 的 SFT 数据（`data_ablation/mixes/full`，1,200 题）、样本顺序、超参（有效批 16 / lr 2e-5 / cosine / warmup 3%）、步数（200 步 ≈ 2.7 epoch）完全相同，唯一差异是初始化权重：
+
+| arm | 初始化 |
+|---|---|
+| base | Qwen2.5-0.5B-Instruct |
+| cpt | E1 的 `replay10_strong/final`（已被 CPT 拉低格式率） |
+
+评测统一 **n=200**（E1 用 n=100，方差 ±5pt 偏大；E2 加大一倍样本量），并把格式率拆成 `\boxed{}` 与 `<reasoning>` 两个成分。
+
+### 结果（真实数字，来自 `results_e2/e2_summary.json`）
+
+| 点 | GSM8K acc | 格式率 | `\boxed{}` 率 | `<reasoning>` 率 | 领域 PPL | 通用 PPL |
+|---|---|---|---|---|---|---|
+| base（未 CPT 未 SFT） | 27.0% | 54.0% | 46.5% | 9.0% | 46.65 | 24.87 |
+| CPT 后（未 SFT） | 25.0% | **44.5%** | 44.5% | **0.0%** | 29.25 | 24.59 |
+| base → SFT | 29.0% | **100%** | 99.0% | 100% | 46.77 | 25.21 |
+| **CPT → SFT** | **28.5%** | **100%** | 99.0% | 100% | **29.32** | **23.57** |
+
+### E2 结论
+
+1. **CPT 破坏格式的机制被定位**：n=200 下格式率 54.0%→44.5%（−9.5pt），其中 `<reasoning>` 段从 9.0% 直接归零 —— CPT 把模型从「指令格式」拉向了「论文摘要」分布，最先丢的是最"外壳"的结构化输出习惯。
+2. **200 步轻量 SFT 即可完全恢复格式**：CPT→SFT 与 base→SFT 最终格式率同为 100%，GSM8K 准确率 28.5% vs 29.0%（差 0.5pt，在 n=200 噪声内）。**先做 CPT 不损害下游 SFT 的可对齐性**。
+3. **SFT 不会洗掉 CPT 的领域收益**：SFT 后领域困惑度 29.32 vs base→SFT 的 46.77（仍 −37.3%），通用困惑度甚至略优于纯 SFT（23.57 vs 25.21）。即「CPT 先行 + SFT 兜底」的流水线各司其职，顺序没有白费。
+
+### 复现命令
+
+```bash
+# 一条命令跑完两组训练 + 四点评测（约 55 min，4060 8GB）
+E2_STEPS=200 E2_N=200 python experiments/cpt_domain/run_e2.py
+
+# 或分步
+python experiments/cpt_domain/train_sft_recover.py --arm base --init D:/models/Qwen2.5-0.5B-Instruct --max-steps 200
+python experiments/cpt_domain/train_sft_recover.py --arm cpt  --init D:/data/cpt_runs/replay10_strong/final --max-steps 200
+python experiments/cpt_domain/eval_cpt.py --model D:/data/sft_runs/e2_cpt/final --tag e2_sft_from_cpt --n-gsm8k 200
+```
 
 ---
 

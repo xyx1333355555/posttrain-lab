@@ -1,0 +1,46 @@
+{
+  "tag": "e2_sft_from_cpt",
+  "model": "D:/data/sft_runs\\e2_cpt\\final",
+  "domain": {
+    "ppl": 29.3168,
+    "avg_nll": 3.3782,
+    "blocks": 59,
+    "tokens": 30149
+  },
+  "general": {
+    "ppl": 23.5747,
+    "avg_nll": 3.1602,
+    "blocks": 22,
+    "tokens": 11242
+  },
+  "gsm8k": {
+    "accuracy": 0.285,
+    "format_rate": 1.0,
+    "fmt_boxed": 0.99,
+    "fmt_reasoning": 1.0,
+    "n": 200,
+    "samples": [
+      {
+        "pred_ok": false,
+        "text": "<reasoning>\nShe has 16-3=<<16-3=13>>13 eggs to sell.\nSo she makes 13*2=$<<13*2=26>>26 dollars every day.\n</reasoning>\nThe final answer is \\boxed{26}."
+      },
+      {
+        "pred_ok": false,
+        "text": "<reasoning>\nThe number of bolts of blue fiber is 2*2=<<2*2=4>>4.\nThe number of bolts of white fiber is 2/2=<<2/2=1>>1.\nSo, the total number of bolts needed for the robe is 4+1=<<4+1=5>>5.\n</reasoning>\nThe final answer is \\boxed{5}."
+      },
+      {
+        "pred_ok": false,
+        "text": "<reasoning>\nThe value of the house after the repairs is worth 1.5 times what it was when Josh bought it because 80,000 * 1.5 = <<80000*1.5=120000>>120,000\nHe put in $30,000 in repairs because 80,000 - 50,000 = <<80000-50000=30000>>30,000\nHis profit from the house is $90,000 because 120,000 - 30,000 "
+      },
+      {
+        "pred_ok": true,
+        "text": "<reasoning>\nHe runs 3*3=<<3*3=9>>9 times a week.\nSo he runs 60*9=<<60*9=540>>540 meters in a week.\n</reasoning>\nThe final answer is \\boxed{540}."
+      },
+      {
+        "pred_ok": false,
+        "text": "<reasoning>\nWendy has 20 chickens * 3 = <<20*3=60>>60 servings of feed.\nShe needs 60 servings * 15 cups of feed per serving = <<60*15=900>>900 cups of feed for the final meal.\n</reasoning>\nThe final answer is \\boxed{900}."
+      }
+    ]
+  },
+  "peak_vram_gb": 1.82
+}
