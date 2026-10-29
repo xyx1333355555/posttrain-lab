@@ -1,0 +1,44 @@
+{
+  "tag": "pure_strong",
+  "model": "outputs/cpt/pure_strong/final",
+  "domain": {
+    "ppl": 29.0786,
+    "avg_nll": 3.37,
+    "blocks": 59,
+    "tokens": 30149
+  },
+  "general": {
+    "ppl": 30.7741,
+    "avg_nll": 3.4267,
+    "blocks": 22,
+    "tokens": 11242
+  },
+  "gsm8k": {
+    "accuracy": 0.27,
+    "format_rate": 0.53,
+    "n": 100,
+    "samples": [
+      {
+        "pred_ok": false,
+        "text": "To determine how much Janet makes at the farmers' market each day, we need to follow these steps:\n\n1. **Calculate the total number of eggs laid by the ducks:**\n   - Janet's ducks lay 16 eggs per day.\n   - She eats 3 eggs in the morning and bakes muffins for her friends, so she loses 3 + 4 = 7 eggs p"
+      },
+      {
+        "pred_ok": false,
+        "text": "To solve this problem, we need to determine how many bolts of blue and white fibers are required for one robe and then use those quantities to find out how many bolts are needed for a larger number of robes. Let's break down the problem step by step.\n\n1. **Determine the quantity of each type of fibe"
+      },
+      {
+        "pred_ok": false,
+        "text": "To determine Josh's profit from flipping a house, we need to follow these steps:\n\n1. **Calculate the total cost of the house:**\n   - Cost of the house: \\$80,000\n   - Cost of repairs: \\$50,000\n\n   Total cost = Cost of the house + Cost of repairs\n   \\[\n   \\text{Total cost} = \\$80,000 + \\$50,000 = \\$13"
+      },
+      {
+        "pred_ok": true,
+        "text": "To determine how many total meters James runs in a week, we need to follow these steps:\n\n1. Calculate the number of meters James runs in one session (sprint).\n2. Multiply the number of sessions per week by the number of meters per session.\n\nStep 1: Calculate the number of meters James runs in one se"
+      },
+      {
+        "pred_ok": false,
+        "text": "To determine how many cups of feed Wendi needs for the final meal of the day, we need to follow these steps:\n\n1. **Calculate total daily feed requirement:**\n   - Morning feed per chicken: 15 cups\n   - Afternoon feed per chicken: 25 cups\n   - Number of chickens: 20\n\n   Total daily feed = (Morning fee"
+      }
+    ]
+  },
+  "peak_vram_gb": 1.82
+}

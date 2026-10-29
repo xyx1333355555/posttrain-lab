@@ -1,0 +1,44 @@
+{
+  "tag": "replay10_strong",
+  "model": "D:/data/cpt_runs/replay10_strong/final",
+  "domain": {
+    "ppl": 29.2458,
+    "avg_nll": 3.3757,
+    "blocks": 59,
+    "tokens": 30149
+  },
+  "general": {
+    "ppl": 24.5944,
+    "avg_nll": 3.2025,
+    "blocks": 22,
+    "tokens": 11242
+  },
+  "gsm8k": {
+    "accuracy": 0.26,
+    "format_rate": 0.46,
+    "n": 100,
+    "samples": [
+      {
+        "pred_ok": false,
+        "text": "To determine how much money Janet makes at the farmers' market each day, we need to follow these steps:\n\n1. **Calculate the total number of eggs laid in a day:**\n   - Janet's ducks lay 16 eggs per day.\n   - She eats 3 eggs in the morning and bakes 4 eggs during the day.\n   - Therefore, the total num"
+      },
+      {
+        "pred_ok": false,
+        "text": "To solve this problem, we need to determine how many bolts of blue and white fibers are required for one robe and then sum them up for all robes produced by a given number of workers.\n\nLet's denote:\n- \\( B \\) as the number of bolts of blue fiber per robe,\n- \\( W \\) as the number of bolts of white fi"
+      },
+      {
+        "pred_ok": false,
+        "text": "To determine Josh's profit from flipping his house, we need to follow these steps:\n\n1. **Calculate the total cost of the house:**\n   - Cost of the house: \\$80,000\n   - Cost of repairs: \\$50,000\n\n   Total cost = Cost of the house + Cost of repairs\n   \\[\n   \\text{Total cost} = \\$80,000 + \\$50,000 = \\$"
+      },
+      {
+        "pred_ok": false,
+        "text": "To determine how many total meters James runs in a week, we need to follow these steps:\n\n1. Calculate the number of meters James runs in one sprint.\n2. Multiply the number of meters per sprint by the number of sprints he runs in one week.\n\nStep 1: Calculate the number of meters James runs in one spr"
+      },
+      {
+        "pred_ok": false,
+        "text": "To determine how many cups of feed Wendi needs for the final meal of the day, we can follow these steps:\n\n1. **Calculate total feed needed per day:**\n   - Morning feed: 15 cups\n   - Afternoon feed: 25 cups\n   - Total feed needed per day = 15 cups + 25 cups = 40 cups\n\n2. **Determine the number of day"
+      }
+    ]
+  },
+  "peak_vram_gb": 1.82
+}

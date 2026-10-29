@@ -1,0 +1,19 @@
+{
+  "tag": "pure_domain",
+  "replay_ratio": 0.0,
+  "train_tokens": 570841,
+  "blocks": 1114,
+  "domain_docs": 1900,
+  "replay_docs": 0,
+  "max_steps": 200,
+  "seq_len": 512,
+  "per_device_batch": 1,
+  "grad_accum": 8,
+  "effective_batch_tokens": 4096,
+  "trainable_params_m": 494.0,
+  "wall_clock_s": 336.8,
+  "s_per_step": 1.68,
+  "tokens_per_s": 1694.7,
+  "final_dir": "C:\\Users\\17856\\WorkBuddy\\2026-10-26-23-32-33\\上海实习冲刺\\posttrain-lab\\outputs\\cpt\\pure_domain\\final",
+  "peak_vram_gb": 4.65
+}

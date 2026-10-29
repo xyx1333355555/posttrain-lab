@@ -1,0 +1,44 @@
+{
+  "tag": "pure_domain",
+  "model": "outputs/cpt/pure_domain/final",
+  "domain": {
+    "ppl": 31.0196,
+    "avg_nll": 3.4346,
+    "blocks": 59,
+    "tokens": 30149
+  },
+  "general": {
+    "ppl": 25.1695,
+    "avg_nll": 3.2256,
+    "blocks": 22,
+    "tokens": 11242
+  },
+  "gsm8k": {
+    "accuracy": 0.29,
+    "format_rate": 0.6,
+    "n": 100,
+    "samples": [
+      {
+        "pred_ok": false,
+        "text": "To determine how much Janet makes at the farmers' market each day, we need to follow these steps:\n\n1. **Calculate the total number of eggs laid per day:**\n   - Janet's ducks lay 16 eggs per day.\n   - She eats 3 eggs for breakfast every morning.\n   - She bakes muffins for her friends every day with 4"
+      },
+      {
+        "pred_ok": false,
+        "text": "To solve this problem, let's break it down step by step:\n\n1. **Identify the given information:**\n   - A robe requires 2 bolts of blue fiber.\n   - The robe also requires half as much white fiber as blue fiber.\n\n2. **Determine the amount of white fiber needed:**\n   Since the robe requires half as much"
+      },
+      {
+        "pred_ok": false,
+        "text": "To determine Josh's profit from flipping a house, we need to follow these steps:\n\n1. **Calculate the total cost of the house:**\n   - Cost of the house: \\$80,000\n   - Cost of repairs: \\$50,000\n\n   Total cost = Cost of the house + Cost of repairs\n   \\[\n   \\text{Total cost} = 80,000 + 50,000 = 130,000\n"
+      },
+      {
+        "pred_ok": false,
+        "text": "To determine how many total meters James runs in a week, we need to follow these steps:\n\n1. **Calculate the distance of one sprint:**\n   James runs 60 meters per sprint.\n\n2. **Determine the number of sprints per week:**\n   James runs 3 sprints per day.\n   There are 7 days in a week, so the number of"
+      },
+      {
+        "pred_ok": false,
+        "text": "To determine how many cups of feed Wendi needs for the final meal of the day, we can follow these steps:\n\n1. **Calculate total feed needed per day:**\n   - Each chicken requires 3 cups of feed.\n   - There are 20 chickens in the flock.\n   - Therefore, the total amount of feed required per day is:\n    "
+      }
+    ]
+  },
+  "peak_vram_gb": 1.82
+}

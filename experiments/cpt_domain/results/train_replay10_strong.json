@@ -1,0 +1,19 @@
+{
+  "tag": "replay10_strong",
+  "replay_ratio": 0.1,
+  "train_tokens": 634419,
+  "blocks": 1239,
+  "domain_docs": 1900,
+  "replay_docs": 360,
+  "max_steps": 300,
+  "seq_len": 512,
+  "per_device_batch": 1,
+  "grad_accum": 8,
+  "effective_batch_tokens": 4096,
+  "trainable_params_m": 494.0,
+  "wall_clock_s": 479.5,
+  "s_per_step": 1.6,
+  "tokens_per_s": 1323.1,
+  "final_dir": "D:/data/cpt_runs\\replay10_strong\\final",
+  "peak_vram_gb": 4.65
+}
