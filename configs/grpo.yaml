@@ -1,0 +1,80 @@
+# ===== Stage 2: GRPO 强化 =====
+model_name_or_path: outputs/sft                      # 冷启动产出的 ckpt
+base_model_for_tokenizer: Qwen/Qwen2.5-Math-1.5B-Instruct
+torch_dtype: bfloat16
+attn_implementation: flash_attention_2
+
+seed: 42
+output_dir: outputs/grpo
+
+# ---- 数据（必须可验证奖励）----
+dataset:
+  name: openai/gsm8k
+  config: main
+  split: train
+  limit: 5000                       # 先用 5000 题跑通，效果好再扩
+  answer_parser: gsm8k_hash         # 从 "#### xxx" 提取最终答案
+
+# ---- GRPO 核心超参 ----
+grpo:
+  num_generations: 8                # 每组采样数 G；必须能被 per_device_train_batch_size 整除
+  max_completion_length: 512
+  max_prompt_length: 256
+  temperature: 1.0
+  top_p: 1.0
+  learning_rate: 1.0e-6
+  beta: 0.0                         # KL 系数；0 表示不加 KL 约束（Dr.GRPO 常用）
+  epsilon: 0.2                      # clip 下限 1-eps
+  epsilon_high: 0.28                # clip 上限 1+eps（DAPO 的 clip-higher，防止策略熵塌陷）
+  scale_rewards: false              # Dr.GRPO：不按长度归一化，治理长度膨胀
+  loss_type: dr_grpo                # 若 TRL 版本不支持会自动回退
+  steps_per_generation: 1
+  num_iterations: 1                 # 单次 rollout 只更新一次 -> 严格 on-policy
+
+# ---- 显存 / 吞吐 ----
+train:
+  mode: full                        # full | lora
+  # 注意：GRPO 里 per_device_train_batch_size 的计量单位是「采样条数」而不是 prompt 数
+  # 每条 prompt 会被采样 num_generations 次，因此：
+  #   每条设备 batch 的 prompt 数 = 16 / 8 = 2
+  #   优化器每一步的 prompt 数   = 2 * gradient_accumulation_steps = 16
+  # 这条算术面试官一定会问，务必自己能推一遍
+  per_device_train_batch_size: 16
+  gradient_accumulation_steps: 8
+  num_train_epochs: 1
+  optim: adamw_bnb_8bit             # 8-bit Adam，关键省显存手段
+  bf16: true
+  gradient_checkpointing: true
+  logging_steps: 5
+  save_steps: 100
+  save_total_limit: 3
+
+  lora:
+    r: 32
+    alpha: 64
+    dropout: 0.0
+    target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+
+# ---- vLLM colocate（单卡能跑的关键）----
+vllm:
+  use_vllm: true
+  vllm_mode: colocate
+  vllm_gpu_memory_utilization: 0.30
+  vllm_tensor_parallel_size: 1
+  vllm_enable_sleep_mode: true
+
+# ---- 三路可验证奖励 ----
+rewards:
+  weights:
+    correctness: 1.0
+    format: 0.2
+    length: 0.05               # 惩罚项的权重（实现里取负号）
+  length_penalty:
+    ref_tokens: 400            # 超过该长度才开始惩罚
+    mode: soft                 # soft: 超出部分线性惩罚; none: 关闭
+
+# ---- 评测 ----
+eval:
+  on_the_fly_tasks: [gsm8k]    # 训练中定期的小样本快评（可选）
+  sample_every_n_steps: 100
+  n_test: 200

@@ -1,0 +1,57 @@
+# ===== Stage 1 冷启动 SFT —— T4 / 16GB 版（Kaggle / Colab）=====
+# 与 configs/sft.yaml 的差异及其原因：
+#   - 模型降到 0.5B       ：16GB 放不下 1.5B 的全参训练
+#   - fp16 + sdpa         ：T4 是 Turing 架构，无 bf16、flash-attn 不稳
+#   - max_length 768      ：显存与吞吐的折中（T4 上 1024 会明显变慢）
+#   - 数据量减到 ~12k     ：一周 30h 配额要留给 GRPO，冷启动不必追求完美
+model_name_or_path: Qwen/Qwen2.5-0.5B-Instruct
+torch_dtype: float16
+attn_implementation: sdpa
+
+seed: 42
+output_dir: outputs/sft_16gb
+
+# ---- 数据 ----
+data:
+  sources:
+    - name: openai/gsm8k
+      config: main
+      split: train
+      limit: 7473
+      answer_key: null          # gsm8k 答案在 "#### xxx"，脚本自动解析
+      problem_key: question
+      solution_key: answer
+    - name: nvidia/OpenMathInstruct-2
+      split: train_1M
+      limit: 5000               # 16GB 上够用，多了没必要
+      answer_key: expected_answer
+      problem_key: problem
+      solution_key: generated_solution
+      require_numeric_answer: true
+  dedup:
+    enable: true
+    method: normalized
+    threshold: 0.9
+  max_length: 768
+  filter:
+    min_solution_chars: 40
+    max_solution_chars: 2500
+    require_parsable_answer: true
+
+# ---- 训练 ----
+training:
+  num_train_epochs: 1
+  per_device_train_batch_size: 8
+  gradient_accumulation_steps: 4      # 有效 batch = 32
+  learning_rate: 2.0e-5               # 0.5B 可以比 1.5B 稍大一点
+  lr_scheduler_type: cosine
+  warmup_ratio: 0.03
+  weight_decay: 0.0
+  max_grad_norm: 1.0
+  logging_steps: 10
+  save_steps: 150
+  save_total_limit: 2
+  bf16: false                          # ★ T4 必须 false
+  gradient_checkpointing: true
+  optim: adamw_bnb_8bit
+  packing: false

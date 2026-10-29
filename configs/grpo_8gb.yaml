@@ -1,0 +1,60 @@
+# GRPO · 8GB 显存档（笔记本 RTX 4060 / 3050 等）
+# 策略：0.5B + LoRA + 关 vLLM（用模型自身 generate，省显存）
+model_name_or_path: Qwen/Qwen2.5-0.5B-Instruct
+base_model_for_tokenizer: Qwen/Qwen2.5-0.5B-Instruct
+output_dir: outputs/grpo_8gb
+seed: 42
+
+dataset:
+  name: gsm8k
+  config: main
+  split: train
+  limit: 1200            # 0.5B 用更多题换稳定信号
+  answer_field: answer
+
+rewards:
+  weights:
+    correctness: 1.0
+    format: 0.5
+    length: 0.3
+  length_penalty:
+    ref_tokens: 300
+    mode: soft            # soft：只对超长部分惩罚，不砍该长的题
+
+train:
+  mode: lora
+  lora:
+    r: 16
+    alpha: 32
+    dropout: 0.05
+    target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+  per_device_train_batch_size: 4   # 4 前向/步 = 1 题 × 4 采样（必须能被 num_generations 整除）
+  gradient_accumulation_steps: 4
+  optim: adamw_torch
+  save_steps: 80
+  save_total_limit: 2
+  # 0.5B 在 8GB 必须开梯度检查点省显存；用非重入式（use_reentrant=False）规避
+  # TRL+checkpoint 在 reentrant 模式下「输入无 grad → policy logps 被 detach → backward 报错」
+  gradient_checkpointing: true
+
+grpo:
+  num_generations: 4
+  max_completion_length: 384
+  max_prompt_length: 512
+  temperature: 1.0
+  top_p: 1.0
+  learning_rate: 1.0e-6   # 0.5B LoRA 后训练学习率（GRPO 一般比 SFT 小一个量级）
+  beta: 0.04            # KL 惩罚，越小越敢探索
+  epsilon: 0.2
+  scale_rewards: false  # DAPO 风格，不做组内归一化
+  steps_per_generation: 1
+  num_iterations: 1
+  max_steps: 150        # 本地 8GB 快速验证封顶；1.5B/A10 主实验去掉此上限跑满
+
+vllm:
+  use_vllm: false       # Windows / 8GB 关掉，避免显存翻倍
+  vllm_mode: colocate
+  vllm_gpu_memory_utilization: 0.2
+
+torch_dtype: float16
+attn_implementation: sdpa

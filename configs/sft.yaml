@@ -1,0 +1,55 @@
+# ===== Stage 1: 冷启动 SFT =====
+model_name_or_path: Qwen/Qwen2.5-Math-1.5B-Instruct
+torch_dtype: bfloat16
+attn_implementation: flash_attention_2
+
+seed: 42
+output_dir: outputs/sft
+
+# ---- 数据 ----
+data:
+  sources:
+    # 可多个数据源混合；任一源下载失败会自动跳过并记录到 logs/skip.log
+    - name: nvidia/OpenMathInstruct-2
+      split: train_1M
+      limit: 30000
+      answer_key: expected_answer
+      problem_key: problem
+      solution_key: generated_solution
+      # 只保留有确定答案的题目（可验证的前提）
+      require_numeric_answer: true
+    - name: openai/gsm8k
+      config: main
+      split: train
+      limit: 7473
+      answer_key: null        # gsm8k 的答案在 "#### xxx" 里，脚本会解析
+      problem_key: question
+      solution_key: answer
+  dedup:
+    enable: true
+    method: normalized       # normalized | minhash
+    threshold: 0.9
+  max_length: 1024
+  filter:
+    min_solution_chars: 40
+    max_solution_chars: 3500
+    # 丢弃答案不唯一的题（防止奖励噪声）
+    require_parsable_answer: true
+
+# ---- 训练 ----
+training:
+  num_train_epochs: 1
+  per_device_train_batch_size: 4
+  gradient_accumulation_steps: 8      # 有效 batch = 32
+  learning_rate: 1.0e-5
+  lr_scheduler_type: cosine
+  warmup_ratio: 0.03
+  weight_decay: 0.0
+  max_grad_norm: 1.0
+  logging_steps: 10
+  save_steps: 200
+  save_total_limit: 2
+  bf16: true
+  gradient_checkpointing: true
+  optim: adamw_torch
+  packing: false                      # 保持样本边界清晰，便于排查数据问题

@@ -1,0 +1,36 @@
+# ---- 实验产物（大体积 checkpoint / 评测结果，不进仓库）----
+outputs/
+
+# ---- Python ----
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+
+# ---- 日志 ----
+*.log
+
+# ---- 虚拟环境（实际在 D 盘，这里保险）----
+.venv/
+venv/
+
+# ---- 密钥 / 环境变量 ----
+.env
+.env.*
+
+# ---- 编辑器 / OS ----
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+.DS_Store
+
+# ---- 大体积模型权重（本地 D 盘，不进仓库）----
+*.bin
+*.safetensors
+*.gguf
+
+# 误建嵌套副本 / 设备名残留
+posttrain-lab/
+nul

@@ -1,0 +1,15 @@
+# ===== 可选依赖：装不上不影响主线 =====
+#
+# 这两项是「能跑得快」而不是「能跑」：
+#   - vLLM：GRPO 的采样加速。没有它 TRL 会用 HF generate，慢 5-10 倍但能跑。
+#   - flash-attn：省显存 + 提速。没有会自动回退 sdpa（runtime.py 已处理）。
+#
+# 安装方式（逐条单独装，失败一条不影响其它）：
+#   pip install vllm
+#   pip install flash-attn --no-build-isolation
+#
+# ⚠️ T4 / Kaggle 上 flash-attn 经常编译失败，别在这上面浪费配额：
+#    直接跳过，runtime.py 会自动用 sdpa。A10 / A100 / 4090 才值得装。
+
+vllm>=0.6.0
+# flash-attn>=2.6.0      # 必须单独执行 pip install flash-attn --no-build-isolation

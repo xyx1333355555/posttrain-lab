@@ -1,0 +1,59 @@
+# ===== 魔搭 ModelScope A10(24GB) 主实验配置 =====
+# A10 是 Ampere 架构 -> 支持 bf16 + flash-attn，与本地 4090 方案基本一致
+# 这条就是你简历上那组「正式数字」的来源
+model_name_or_path: Qwen/Qwen2.5-Math-1.5B-Instruct
+base_model_for_tokenizer: Qwen/Qwen2.5-Math-1.5B-Instruct
+torch_dtype: bfloat16
+attn_implementation: flash_attention_2
+
+seed: 42
+output_dir: outputs/grpo_a10
+
+dataset:
+  name: openai/gsm8k
+  config: main
+  split: train
+  limit: 5000
+  answer_parser: gsm8k_hash
+
+grpo:
+  num_generations: 8
+  max_completion_length: 512
+  max_prompt_length: 256
+  temperature: 1.0
+  top_p: 1.0
+  learning_rate: 1.0e-6
+  beta: 0.0
+  epsilon: 0.2
+  epsilon_high: 0.28
+  scale_rewards: false
+  loss_type: dr_grpo
+  num_iterations: 1
+
+train:
+  mode: full
+  per_device_train_batch_size: 16
+  gradient_accumulation_steps: 8
+  num_train_epochs: 1
+  optim: adamw_bnb_8bit
+  bf16: true
+  gradient_checkpointing: true
+  logging_steps: 5
+  save_steps: 80
+  save_total_limit: 3
+
+vllm:
+  use_vllm: true
+  vllm_mode: colocate
+  vllm_gpu_memory_utilization: 0.30
+  vllm_tensor_parallel_size: 1
+  vllm_enable_sleep_mode: true
+
+rewards:
+  weights:
+    correctness: 1.0
+    format: 0.2
+    length: 0.05
+  length_penalty:
+    ref_tokens: 400
+    mode: soft

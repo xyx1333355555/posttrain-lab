@@ -1,0 +1,57 @@
+attn_implementation: sdpa
+base_model_for_tokenizer: Qwen/Qwen2.5-0.5B-Instruct
+dataset:
+  answer_field: answer
+  config: main
+  limit: 99999
+  name: gsm8k
+  split: train
+grpo:
+  beta: 0.04
+  epsilon: 0.2
+  learning_rate: 1.0e-06
+  max_completion_length: 384
+  max_prompt_length: 512
+  max_steps: 150
+  num_generations: 4
+  num_iterations: 1
+  scale_rewards: false
+  steps_per_generation: 1
+  temperature: 1.0
+  top_p: 1.0
+model_name_or_path: Qwen/Qwen2.5-0.5B-Instruct
+output_dir: outputs/ablation/easy_heavy
+rewards:
+  length_penalty:
+    mode: soft
+    ref_tokens: 300
+  weights:
+    correctness: 1.0
+    format: 0.5
+    length: 0.3
+seed: 42
+torch_dtype: float16
+train:
+  gradient_accumulation_steps: 4
+  gradient_checkpointing: true
+  lora:
+    alpha: 32
+    dropout: 0.05
+    r: 16
+    target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+  mode: lora
+  optim: adamw_torch
+  per_device_train_batch_size: 4
+  save_steps: 15
+  save_total_limit: 2
+vllm:
+  use_vllm: false
+  vllm_gpu_memory_utilization: 0.2
+  vllm_mode: colocate

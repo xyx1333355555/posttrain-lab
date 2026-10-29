@@ -1,0 +1,39 @@
+{
+  "full": {
+    "n": 1200,
+    "composition": {
+      "easy": 429,
+      "mid": 572,
+      "hard": 199
+    }
+  },
+  "easy_heavy": {
+    "n": 1200,
+    "composition": {
+      "easy": 840,
+      "mid": 0,
+      "hard": 360
+    }
+  },
+  "hard_heavy": {
+    "n": 1200,
+    "composition": {
+      "easy": 360,
+      "mid": 0,
+      "hard": 840
+    }
+  },
+  "_meta": {
+    "src_rows": 7473,
+    "after_quality_filter": 7473,
+    "after_exact_dedup": 7473,
+    "after_near_dedup": 7472,
+    "bucket_distribution": {
+      "easy": 2673,
+      "mid": 3561,
+      "hard": 1238
+    },
+    "N_per_mix": 1200,
+    "seed": 42
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "easy_heavy": {
+    "ckpt": "C:\\Users\\17856\\WorkBuddy\\2026-10-26-23-32-33\\上海实习冲刺\\posttrain-lab\\outputs\\ablation\\easy_heavy\\main\\checkpoint-15",
+    "gsm8k": {
+      "n": 400,
+      "accuracy": 33.0,
+      "format_rate": 74.75,
+      "wallclock_s": 722.1,
+      "throughput_tok_s": 297.8
+    }
+  },
+  "hard_heavy": {
+    "ckpt": "C:\\Users\\17856\\WorkBuddy\\2026-10-26-23-32-33\\上海实习冲刺\\posttrain-lab\\outputs\\ablation\\hard_heavy\\main\\checkpoint-15",
+    "gsm8k": {
+      "n": 400,
+      "accuracy": 31.75,
+      "format_rate": 74.0,
+      "wallclock_s": 726.1,
+      "throughput_tok_s": 294.5
+    }
+  }
+}

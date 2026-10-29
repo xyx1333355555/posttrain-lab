@@ -1,0 +1,35 @@
+# ===== 核心依赖 =====
+# Python 3.10 / CUDA 12.1+
+#
+# ⚠️ 这个文件被刻意保持「一定能装成功」的状态。
+# 原版本把 `flash-attn --no-build-isolation` 写在同一行 —— pip **不支持**在
+# requirements 行内写 --no-build-isolation，会直接抛
+#   Expected package name at the start of dependency specifier
+# 导致整份 requirements 装不上（连 torch 都没装上）。已修复，flash-attn 挪到可选文件。
+torch>=2.4.0
+transformers>=4.45.0,<4.58.0
+datasets>=2.20.0
+accelerate>=0.34.0
+trl>=0.19.0
+peft>=0.13.0
+bitsandbytes>=0.44.0
+
+# ===== 数据与答案校验 =====
+math-verify>=0.5.0
+latex2sympy2_extended>=0.7.0
+pandas>=2.0.0
+numpy>=1.26.0
+pyyaml>=6.0
+tqdm>=4.66.0
+
+# ===== 可视化 =====
+matplotlib>=3.8.0
+
+# ===== 离线自检（tests/test_offline.py）所需 =====
+# 只需 numpy + pyyaml，上面已包含 —— 笔记本上不用装 torch 也能跑 make test
+
+# 国内加速（命令行执行，不是 pip 包）：
+#   export HF_ENDPOINT=https://hf-mirror.com
+# 若 HF 完全无法访问：
+#   pip install modelscope
+#   modelscope download --model Qwen/Qwen2.5-Math-1.5B-Instruct --local_dir models/
